@@ -3,6 +3,7 @@ package tw.com.finalproject.shellyYang.message.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +22,11 @@ public class MessageService {
 	 * @param input
 	 * @return
 	 */
-	public MessageOutputData addMessage(MessageInputData input) {
-		
+	public MessageOutputData addMessage(String msg) {
+		SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		SecurityContextHolder.getContext().getAuthentication().getName();
 		//判斷該用戶的身分
-		log.info(getUserRole());
+		
 		//依照該用戶身分呼叫對應DB去確認是否存在
 		
 		//將DTO轉成Entity
@@ -46,8 +48,8 @@ public class MessageService {
 	
 	public String getUserRole() {
 		
-		SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return null;
+		  System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 	
 	//<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
