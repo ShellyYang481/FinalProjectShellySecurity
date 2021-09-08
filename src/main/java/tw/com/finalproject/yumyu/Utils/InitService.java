@@ -5,7 +5,10 @@ import static tw.com.finalproject.yumyu.Enums.ApplicationRoles.MEMBER;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -37,6 +40,7 @@ import tw.com.finalproject.yumyu.InternalUse.Service.ClientActivityService;
 import tw.com.finalproject.yumyu.InternalUse.Service.ClientService;
 import tw.com.finalproject.yumyu.InternalUse.Service.EmployeeService;
 import tw.com.finalproject.yumyu.Member.ApplicationUser;
+import tw.com.finalproject.yumyu.Member.Repository.ApplicationUserRepository;
 import tw.com.finalproject.yumyu.Member.Service.ApplicationUserService;
 
 @Component
@@ -63,11 +67,40 @@ public class InitService {
 	private EventService eventService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private ApplicationUserRepository applicationUserDao;
+	
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void doSomethingAfterStartup() {
 		System.out.println("Init Start!");
 
+		
+List<ApplicationUser> users = new  ArrayList<ApplicationUser>();
+		
+		List<String> city = new ArrayList<String>();
+		city.add("台北市");
+		city.add("新北市");
+		city.add("高雄市");
+		city.add("新竹市");
+		
+		
+		for(int i =0;i<30;i++) {
+			int random = new Random().nextInt(city.size());
+			ApplicationUser user = new ApplicationUser();
+			user.setUsername("joe120106_"+i+"@gmail.com");
+			user.setPhone("091792217"+i);
+			user.setFullName("游聿民"+i);
+			user.setRoles(MEMBER.name());
+			user.setZipCode("337");
+			user.setPassword("asd");
+			user.setCity(city.get(random));
+			user.setFullAddress("中正東路438巷15號");
+			user.setTown("大園區");
+			users.add(user);
+		}
+		applicationUserDao.saveAll(users);
+		
 //		Create default Member		
 		ApplicationUser defaultApplicationUser = ApplicationUser.builder().username("joe120106@gmail.com")
 				.password(passwordEncoder.encode("asd")).roles(MEMBER.name()).city("桃園市").town("大園區")
